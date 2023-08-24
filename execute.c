@@ -2,11 +2,6 @@
 
 #define MAX_BUFFER_SIZE 256
 
-static instruction_t instructions[] = {
-	{"push", push},
-	{"pall", pall},
-	{NULL, NULL}
-};
 
 /**
  * memory_free - free memory.
@@ -35,9 +30,8 @@ void exe_instruction(FILE *file)
 	char buffer[MAX_BUFFER_SIZE];
 	stack_t *stack = NULL;
 	int line_number = 1;
-	int found = 0;
-	int i;
 	char *opcode;
+	unsigned int value;
 
 	while (fgets(buffer, sizeof(buffer), file) != NULL)
 	{
@@ -49,18 +43,26 @@ void exe_instruction(FILE *file)
 			fprintf(stderr, "L%u: unknown instruction\n", line_number);
 			exit(EXIT_FAILURE);
 		}
-
-		for (i = 0; instructions[i].opcode != NULL; i++)
+		if (strcmp(opcode, "push") == 0)
 		{
-			if (strcmp(opcode, instructions[i].opcode) == 0)
+			char *value_str = strtok(NULL, " ");
+			if (value_str == NULL)
 			{
-				instructions[i].f(&stack, line_number);
-				found = 1;
-				break;
+				fprintf(stderr, "L%u: usage: push integer\n", line_number);
+				 exit(EXIT_FAILURE);
 			}
+			if (sscanf(value_str, "%u", &value) != 1)
+			{
+				fprintf(stderr, "L%u: invalid value for push\n", line_number);
+				exit(EXIT_FAILURE);
+			}
+			push(&stack, value);
 		}
-
-		if (!found)
+		else if (strcmp(opcode, "pint") == 0)
+		{
+			pint(&stack, line_number);
+		}
+		else
 		{
 			fprintf(stderr, "L%u: unknown instruction %s\n", line_number, opcode);
 			exit(EXIT_FAILURE);
