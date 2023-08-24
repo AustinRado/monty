@@ -33,15 +33,16 @@ void memory_free(stack_t *curr)
 void exe_instruction(FILE *file)
 {
 	char buffer[MAX_BUFFER_SIZE];
-	char *opcode = strtok(buffer, " ");
 	stack_t *stack = NULL;
 	int line_number = 1;
 	int found = 0;
 	int i;
+	char *opcode;
 
 	while (fgets(buffer, sizeof(buffer), file) != NULL)
 	{
 		buffer[strcspn(buffer, "\n")] = '\0';
+		opcode = strtok(buffer, " ");
 
 		if (opcode == NULL)
 		{
