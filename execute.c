@@ -46,6 +46,7 @@ void exe_instruction(FILE *file)
 		if (strcmp(opcode, "push") == 0)
 		{
 			char *value_str = strtok(NULL, " ");
+
 			if (value_str == NULL)
 			{
 				fprintf(stderr, "L%u: usage: push integer\n", line_number);
@@ -62,11 +63,11 @@ void exe_instruction(FILE *file)
 		{
 			pint(&stack, line_number);
 		}
-		else if(strcmp(opcode, "pop") == 0)
+		else if (strcmp(opcode, "pop") == 0)
 		{
 			pop(&stack, line_number);
 		}
-		else if(strcmp(opcode, "swap") == 0)
+		else if (strcmp(opcode, "swap") == 0)
 		{
 			swap(&stack, line_number);
 		}
