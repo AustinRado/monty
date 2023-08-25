@@ -2,6 +2,16 @@
 
 #define MAX_BUFFER_SIZE 256
 
+static instruction_t instructions[] = {
+    {"push", push},
+    {"pall", pall},
+    {"pint", pint},
+    {"pop", pop},
+    {"swap", swap},
+    {"add", add},
+    {"nop", nop},
+    {NULL, NULL}
+};
 
 /**
  * memory_free - free memory.
@@ -31,7 +41,8 @@ void exe_instruction(FILE *file)
 	stack_t *stack = NULL;
 	int line_number = 1;
 	char *opcode;
-	unsigned int value;
+	int found;
+	int i;
 
 	while (fgets(buffer, sizeof(buffer), file) != NULL)
 	{
@@ -43,43 +54,19 @@ void exe_instruction(FILE *file)
 			fprintf(stderr, "L%u: unknown instruction\n", line_number);
 			exit(EXIT_FAILURE);
 		}
-		if (strcmp(opcode, "push") == 0)
+		found = 0;
+		
+		for (i = 0; instructions[i].opcode != NULL; i++)
 		{
-			char *value_str = strtok(NULL, " ");
+			if (strcmp(opcode, instructions[i].opcode) == 0)
+			{
+				instructions[i].f(&stack, line_number);
+				found = 1;
+				break;
+			}
+		}
 
-			if (value_str == NULL)
-			{
-				fprintf(stderr, "L%u: usage: push integer\n", line_number);
-				 exit(EXIT_FAILURE);
-			}
-			if (sscanf(value_str, "%u", &value) != 1)
-			{
-				fprintf(stderr, "L%u: invalid value for push\n", line_number);
-				exit(EXIT_FAILURE);
-			}
-			push(&stack, value);
-		}
-		else if (strcmp(opcode, "pint") == 0)
-		{
-			pint(&stack, line_number);
-		}
-		else if (strcmp(opcode, "pop") == 0)
-		{
-			pop(&stack, line_number);
-		}
-		else if (strcmp(opcode, "swap") == 0)
-		{
-			swap(&stack, line_number);
-		}
-		else if (strcmp(opcode, "add") == 0)
-		{
-			add(&stack, line_number);
-		}
-		else if (strcmp(opcode, "nop") == 0)
-		{
-			nop(&stack, line_number);
-		}
-		else
+		if (!found)
 		{
 			fprintf(stderr, "L%u: unknown instruction %s\n", line_number, opcode);
 			exit(EXIT_FAILURE);
