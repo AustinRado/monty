@@ -3,14 +3,14 @@
 #define MAX_BUFFER_SIZE 256
 
 static instruction_t instructions[] = {
-    {"push", push},
-    {"pall", pall},
-    {"pint", pint},
-    {"pop", pop},
-    {"swap", swap},
-    {"add", add},
-    {"nop", nop},
-    {NULL, NULL}
+	{"push", push},
+	{"pall", pall},
+	{"pint", pint},
+	{"pop", pop},
+	{"swap", swap},
+	{"add", add},
+	{"nop", nop},
+	{NULL, NULL}
 };
 
 /**
@@ -55,7 +55,7 @@ void exe_instruction(FILE *file)
 			exit(EXIT_FAILURE);
 		}
 		found = 0;
-		
+
 		for (i = 0; instructions[i].opcode != NULL; i++)
 		{
 			if (strcmp(opcode, instructions[i].opcode) == 0)
