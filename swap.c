@@ -1,7 +1,7 @@
 #include "monty.h"
 
 /**
- * Swaps- the values of the top two elements of the stack.
+ * swap - the values of the top two elements of the stack.
  * @stack: Pointer to the top of the stack.
  * @line_number: Line number of the instruction.
  */
